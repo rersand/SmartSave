@@ -1,0 +1,425 @@
+/* CONFIGURAÇÕES GERAIS E VARIÁVEIS */
+:root {
+  --color-brand: #FF007F;          /* Rosa/Roxo característico do projeto */
+  --color-dark-bg: #0A0A0A;        /* Fundo escuro opressivo das primeiras seções */
+  --color-tech-bg: #080F26;        /* Fundo azul noturno profundo (Fase 2) */
+  --color-light-bg: #FFFFFF;       /* Fundo claro de liberdade (Fase 3) */
+  --color-light-gray: #F4F6F9;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-dark-bg);
+  color: #FFFFFF;
+  overflow-x: hidden;
+  transition: background-color 1s ease-in-out, color 0.8s ease-in-out;
+}
+
+/* CLASSES DE TRANSIÇÃO DE TEMA (Controladas via React) */
+.theme-dark { background-color: var(--color-dark-bg); color: #FFFFFF; min-height: 100vh; transition: background-color 1s ease, color 0.8s ease; }
+.theme-tech { background-color: var(--color-tech-bg); color: #FFFFFF; min-height: 100vh; transition: background-color 1s ease, color 0.8s ease; }
+.theme-light { background-color: var(--color-light-bg); color: #1E2022; min-height: 100vh; transition: background-color 1s ease, color 0.8s ease; }
+
+/* EFEITO DE RUÍDO (NOISE OVERLAY) */
+.noise-overlay {
+  position: relative;
+}
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  z-index: 1;
+}
+
+/* ESTRUTURA BASE DE LAYOUT */
+.max-width-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2;
+}
+
+section {
+  position: relative;
+  padding: 120px 0;
+}
+
+/* ANIMAÇÃO DE REVELAÇÃO NO SCROLL (Substituindo Framer Motion) */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* COMPONENTES FIXOS: NAVEGAÇÃO */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 64px;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.5s ease;
+}
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+.nav-links {
+  display: flex;
+  gap: 32px;
+}
+.nav-link {
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.nav-link:hover { opacity: 0.6; }
+.btn-cta {
+  background-color: var(--color-brand);
+  color: #FFFFFF !important;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.2s;
+}
+.btn-cta:hover { background-color: #FF4D85; transform: scale(1.05); }
+
+/* SEÇÃO HERO */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 96px;
+  padding-top: 128px;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.hero-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+}
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.9) 100%);
+}
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 48px;
+}
+.col-8 { grid-column: span 8; }
+.col-7 { grid-column: span 7; }
+.col-5 { grid-column: span 5; }
+.col-4 { grid-column: span 4; }
+.col-3 { grid-column: span 3; }
+
+.section-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--color-brand);
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+h1 {
+  font-size: 80px;
+  font-weight: 900;
+  letter-spacing: -3px;
+  line-height: 0.95;
+}
+.highlight { color: var(--color-brand); }
+.hero-desc {
+  margin-top: 40px;
+  font-size: 18px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+  max-width: 640px;
+}
+.hero-stat {
+  border-left: 1px solid rgba(255,255,255,0.15);
+  padding-left: 24px;
+  align-self: flex-end;
+  padding-bottom: 32px;
+}
+.stat-big-number {
+  font-size: 80px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* SEÇÃO PROBLEMA E GRID DE ESTATÍSTICAS */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background-color: rgba(255,255,255,0.1);
+  margin-top: 64px;
+}
+.theme-light .grid-3 { background-color: rgba(0,0,0,0.1); }
+.stat-box {
+  background-color: #0A0A0A;
+  padding: 48px;
+  transition: background-color 0.5s;
+}
+.theme-light .stat-box { background-color: #FFFFFF; }
+.stat-box h3 {
+  font-size: 72px;
+  font-weight: 900;
+  color: var(--color-brand);
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+/* SEÇÃO SOLUÇÕES ATUAIS */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.card {
+  padding: 40px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s;
+}
+.theme-light .card { border: 1px solid rgba(0,0,0,0.1); }
+.card:hover { border-color: rgba(255,0,127,0.4); }
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.card-badge {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 4px 8px;
+  color: rgba(255,255,255,0.4);
+}
+.theme-light .card-badge { border-color: rgba(0,0,0,0.2); color: rgba(0,0,0,0.4); }
+.card-fail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  color: var(--color-brand);
+  font-weight: 600;
+  font-size: 14px;
+}
+.theme-light .card-fail { border-top-color: rgba(0,0,0,0.1); }
+
+/* SEÇÃO COMO FUNCIONA E DIFERENCIAIS */
+.step-card:hover { border-color: rgba(255,0,127,0.4) !important; transform: scale(1.01); }
+.diff-card { border-radius: 16px; background-color: rgba(255,255,255,0.03); }
+.theme-light .diff-card { background-color: rgba(0,0,0,0.03); }
+.diff-card:hover { box-shadow: 0 8px 32px rgba(255,0,127,0.15); border-color: rgba(255,0,127,0.4) !important; }
+
+/* MAPA VISUAL DO SMART SAVE */
+.aspect-square-box {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.map-bg-img {
+  position: absolute;
+  inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0.5;
+}
+.radar-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.center-node {
+  width: 16px; height: 16px;
+  background-color: var(--color-brand);
+  border-radius: 50%;
+  box-shadow: 0 0 30px var(--color-brand);
+}
+.center-node::after, .center-node::before {
+  content: "";
+  position: absolute;
+  border: 2px solid var(--color-brand);
+  border-radius: 50%;
+  animation: pulse-radar 3s linear infinite;
+}
+.center-node::after { width: 160px; height: 160px; animation-delay: 1s; }
+.center-node::before { width: 160px; height: 160px; animation-delay: 2s; }
+
+.map-floating-panel {
+  position: absolute;
+  bottom: 16px; left: 16px; right: 16px;
+  backdrop-filter: blur(12px);
+  background-color: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 16px; border-radius: 12px;
+  color: #FFFFFF;
+}
+
+/* RECONSTRUÇÃO DA INTERAÇÃO DA BOLHA (BUBBLESIM) */
+.simulation-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+  cursor: crosshair;
+}
+.theme-light .simulation-viewport { border-color: rgba(0,0,0,0.1); }
+.bubble-perimeter {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: background 0.3s, border 0.3s, box-shadow 0.3s;
+}
+.marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  text-align: center;
+  user-select: none;
+}
+.marker-icon-wrapper {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.marker-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 8px;
+  letter-spacing: 2px;
+}
+.theme-dark .marker-label, .theme-tech .marker-label { color: #FFFFFF; }
+.theme-light .marker-label { color: #1E2022; }
+
+.side-status-panel {
+  background-color: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 24px; border-radius: 16px;
+}
+.theme-light .side-status-panel { background-color: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.1); }
+
+/* GRID DE TECNOLOGIAS */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.theme-light .tech-grid { background-color: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.1); }
+.tech-item {
+  background-color: rgba(255,255,255,0.03);
+  padding: 40px;
+  transition: background-color 0.3s;
+}
+.theme-light .tech-item { background-color: #FFFFFF; }
+.tech-item:hover { background-color: rgba(255,0,127,0.05); }
+.theme-light .tech-item:hover h4 { color: var(--color-brand); transition: color 0.3s; }
+.theme-dark .tech-item:hover h4, .theme-tech .tech-item:hover h4 { color: var(--color-brand); transition: color 0.3s; }
+
+/* LINHA DO TEMPO (ROADMAP) */
+.roadmap-timeline {
+  position: relative;
+}
+.roadmap-timeline::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: 0; bottom: 0;
+  width: 1px; background-color: rgba(255,255,255,0.15);
+  transform: translateX(-50%);
+}
+.theme-light .roadmap-timeline::before { background-color: rgba(0,0,0,0.15); }
+.roadmap-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  position: relative;
+  margin-bottom: 48px;
+}
+.roadmap-node {
+  position: absolute;
+  left: 50%; top: 0;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+
+/* ANIMATION SHORTCUTS */
+@keyframes pulse-radar {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+}
+
+/* RESPONSIVIDADE (MEDIA QUERIES) */
+@media (max-width: 1024px) {
+  h1 { font-size: 56px; }
+  .grid-12, .grid-cards, .grid-3, .tech-grid, .grid-2-col { grid-template-columns: 1fr !important; }
+  .col-8, .col-7, .col-5, .col-4, .col-3 { grid-column: span 12; }
+  .roadmap-timeline::before { left: 16px; }
+  .roadmap-row { grid-template-columns: 1fr; gap: 16px; padding-left: 48px; }
+  .roadmap-node { left: 16px; transform: none; }
+  .nav-links { display: none; }
+}
